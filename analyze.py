@@ -6,102 +6,59 @@ df = pd.read_csv('data/raw/shopping_behavior_updated.csv')
 # calculate summary statistics on the Purchase Amount column
 # TODO: Is there a way to encapsulate all this functionality
 # TODO: in one function call?
-s1 = df['Purchase Amount (USD)'].mean()
-s2 = df['Purchase Amount (USD)'].median()
-s3 = df['Purchase Amount (USD)'].max()
-s4 = df['Purchase Amount (USD)'].min()
-s5 = df['Purchase Amount (USD)'].std()
 
-print("Summary statistics on Purchase Amount (USD)")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+## SOLUTION
+
+# to access only the data from the Purchase Amount column, we create a separate dataframe 
+purchase_amt_df = df['Purchase Amount (USD)']
+# to calculate summary statistics on the Purchase Amount column all in one call, we utilize the .describe() function
+print('Summary statistics on Purchase Amount (USD)')
+print(purchase_amt_df.describe())
 
 # calculate summary statistics on the Age column
 # TODO: Is there a way to encapsulate all this functionality
 # TODO: in one function call?
-s1 = df['Age'].mean()
-s2 = df['Age'].median()
-s3 = df['Age'].max()
-s4 = df['Age'].min()
-s5 = df['Age'].std()
 
-print("Summary statistics on Age")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+## SOLUTION
+
+# Repeated methods in Purchase Amount issue
+age_df = df['Age']
+print('Summary statistics on Age')
+print(age_df.describe())
 
 # summary statistics
 # TODO: is there another function we can use to calculate metrics on groups?
-winter = df[df.Season == "Winter"]
-summer = df[df.Season == "Summer"]
-spring = df[df.Season == "Spring"]
-fall = df[df.Season == "Fall"]
 
-s1 = winter['Purchase Amount (USD)'].mean()
-s2 = winter['Purchase Amount (USD)'].median()
-s3 = winter['Purchase Amount (USD)'].max()
-s4 = winter['Purchase Amount (USD)'].min()
-s5 = winter['Purchase Amount (USD)'].std()
+## SOLUTION 
 
+# For every group, we create a separate dataframe and run .desribe() function on them 
+
+winter_df = df[df['Season']=='Winter']['Purchase Amount (USD)']
 print("Winter summary statistics on Purchase Amount (USD)")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+print(winter_df.describe())
 
-s1 = summer['Purchase Amount (USD)'].mean()
-s2 = summer['Purchase Amount (USD)'].median()
-s3 = summer['Purchase Amount (USD)'].max()
-s4 = summer['Purchase Amount (USD)'].min()
-s5 = summer['Purchase Amount (USD)'].std()
-
+summer_df = df[df['Season']=='Summer']['Purchase Amount (USD)']
 print("Summer summary statistics on Purchase Amount (USD)")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+print(summer_df.describe())
 
-s1 = spring['Purchase Amount (USD)'].mean()
-s2 = spring['Purchase Amount (USD)'].median()
-s3 = spring['Purchase Amount (USD)'].max()
-s4 = spring['Purchase Amount (USD)'].min()
-s5 = spring['Purchase Amount (USD)'].std()
-
+spring_df = df[df['Season']=='Spring']['Purchase Amount (USD)']
 print("Spring summary statistics on Purchase Amount (USD)")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+print(spring_df.describe())
 
-s1 = fall['Purchase Amount (USD)'].mean()
-s2 = fall['Purchase Amount (USD)'].median()
-s3 = fall['Purchase Amount (USD)'].max()
-s4 = fall['Purchase Amount (USD)'].min()
-s5 = fall['Purchase Amount (USD)'].std()
-
+fall_df = df[df['Season']=='Fall']['Purchase Amount (USD)']
 print("Fall summary statistics on Purchase Amount (USD)")
-print("Mean", s1)
-print("Median", s2)
-print("Max", s3)
-print("Min", s4)
-print("Standard Dev", s5)
-print()
+print(fall_df.describe())
 
 # keep all columns except for "Customer", & "Discount Applied"
 # TODO: is there a more efficient way to exclude columns in your dataset?
+
+## SOLUTION 
+
+# utilize the .drop() function to drop the "Customer", & "Discount Applied" columns and axis = 1 to specify dropping of columns instead of rows
+
+modified_df = df.drop(['Customer', 'Discount Applied'], axis = 1)
+print(modified_df)
+
 df = df[[
     "Customer ID",
     "Age",
@@ -135,6 +92,8 @@ for method in payment_methods:
     most_frequent_method[method] = len(ny[ny['Payment Method'] == method])
 
 print(most_frequent_method)
+
+#location payment_method 
 
 # Write this updated data out to csv file
 df.to_csv('data/processed/cleaned_data.csv', index=False)
