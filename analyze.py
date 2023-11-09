@@ -59,26 +59,6 @@ print(fall_df.describe())
 modified_df = df.drop(['Customer', 'Discount Applied'], axis = 1)
 print(modified_df)
 
-df = df[[
-    "Customer ID",
-    "Age",
-    "Gender",
-    "Item Purchased",
-    "Category",
-    "Purchase Amount (USD)",
-    "Location",
-    "Size",
-    "Color",
-    "Season",
-    "Review Rating",
-    "Subscription Status",
-    "Shipping Type",
-    "Promo Code Used",
-    "Previous Purchases",
-    "Payment Method",
-    "Frequency of Purchases"
-]]
-
 # figure out most popular payment method in NY
 # TODO: is there anyway we could modularize this behavior to apply to all
 # TODO: possible states? (OR possibly use a pandas function that does this
@@ -93,7 +73,16 @@ for method in payment_methods:
 
 print(most_frequent_method)
 
-#location payment_method 
+# to showcase the most frequent payment method in each state we create a separate dataframe that only consults data from the 'Location' and 'Payment Method'
+desired_columns_df = df[['Location', 'Payment Method']]
+# within the dataframe we run multiple pandas functions starting with .groupby() which allows all the locations to be split based off of the state 
+grouped_by_location = desired_columns_df.groupby('Location')
+# with the groupby object, we run the .value_counts() function on the Payment Method column to return the values of every payment method used within each location
+payment_method_counts = grouped_by_location['Payment Method'].value_counts()
+# combining .groupby() function with the previous .value.count() function and adding the .idxmax() function which will return the most frequent payment method count for each state
+most_frequent_payment_methods = payment_method_counts.groupby('Location').idxmax()
+print(most_frequent_payment_methods)
+
 
 # Write this updated data out to csv file
 df.to_csv('data/processed/cleaned_data.csv', index=False)
